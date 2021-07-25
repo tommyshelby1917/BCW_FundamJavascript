@@ -3,12 +3,12 @@ import CreateTournament from "./classes/CreateTournament.js";
 import TableTournament from "./classes/TableTournament.js";
 import PlayMatches from "./classes/PlayMatches.js";
 
-// Se crea el torneo
+// The tournament is created
 const torneo = new CreateTournament(teams);
 
-// Se mezclan los equipos para la primera ronda
+// Teams are mixed for the first round
 const teamsOfTheTournament = torneo.createMatches();
 
-// Se juega el torneo
+// The tournament is going to play
 console.log("===============================================\n==== COMIENZO DE LA FASE DE ELIMINATORIAS =====\n===============================================\n");
 new PlayMatches(teamsOfTheTournament).play();

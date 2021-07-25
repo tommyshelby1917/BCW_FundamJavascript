@@ -3,18 +3,18 @@ export default class PlayMatches {
         this.matches = matches;
         this.winers = [];
         this.rounds = 0;
-        this.results = [];
     }
 
     play() {
+        let results = [];
         let newMatch = [];
+        // The matchIndex will help us to know which round we are in
         let matchIndex = 1;
 
-        // Vaciamos los ganadores y resultados cada vez que se inicia una nueva ronda
+        // We empty the winners and results every time a new round starts
         this.winers = [];
-        this.results = [];
 
-        // Cada vez que entra suma una ronda para pasar de fase
+        // Each time we adds a round to pass to the next phase
         this.rounds++;
 
 
@@ -35,76 +35,73 @@ export default class PlayMatches {
             }
         }
 
-        // Funcion que crea valor aleatorio del 1 al 6
+        // Random value to 6
         function goals() {
             return Math.round(Math.random() * 6);
         }
 
-        // En caso de empate
-        function penaltis(team) {
-            let matchPenalti = {
+        // Main function where all the juice recipe of each game is
+        function playGame(match) {
+            let penaltisRound = false;
+
+            let matchInPlay = {
                 'team1': goals(),
                 'team2': goals()
             }
 
-            if (matchPenalti.team1 > matchPenalti.team2) {
-                newMatch.push(team[0]);
-            } else if (matchPenalti.team1 === matchPenalti.team2) {
-                penaltis(team);
-            } else {
-                newMatch.push(team[1]);
+            // If it's a draw
+            while (matchInPlay.team1 == matchInPlay.team2) {
+                matchInPlay.team1 = goals();
+                matchInPlay.team2 = goals();
             }
 
-            return `${team[0]} ${matchPenalti.team1} - ${team[1]} ${matchPenalti.team2} \t\t(Q${matchIndex})`;
+            if (matchInPlay.team1 > matchInPlay.team2) {
+                results.push(`${match[0]} ${matchInPlay.team1} - ${match[1]} ${matchInPlay.team2} \t\t(Q${matchIndex})`);
+                return match[0];
+            } else {
+                results.push(`${match[0]} ${matchInPlay.team1} - ${match[1]} ${matchInPlay.team2} \t\t(Q${matchIndex})`);
+                return match[1];
 
+            }
         }
 
-        // Recorre cada partido
+        // Go through each match
         this.matches.forEach(team => {
-            let penaltisRound = false;
-            let match = {
-                'team1': goals(),
-                'team2': goals()
-            }
 
-            if (match.team1 > match.team2) {
-                newMatch.push(team[0]);
-            } else if (match.team1 === match.team2) {
-                penaltisRound = true;
-                this.results.push(penaltis(team));
-            } else {
-                newMatch.push(team[1]);
-            }
+            // Play the match
+            newMatch.push(playGame(team));
 
+            // In the playGame function we add the winning team of each match to newmatch
+            // in this function we dump them into the winers array and clean the newMatch array
+            // for the next party
             if (newMatch.length === 2) {
                 this.winers.push(newMatch);
                 newMatch = [];
             }
 
-            if (!penaltisRound) this.results.push(`${team[0]} ${match.team1} - ${team[1]} ${match.team2} \t\t(Q${matchIndex})`);
-
             matchIndex++;
-
 
         });
 
 
-        // Se juega la final por lo tanto anunciamos el ganador
+        // The final round is playing so we show the winner of the cup
         if (this.rounds == 4) {
             announcement(this.rounds);
-            this.results.forEach(result => console.log(result));
-            console.log(`===============================================\n${newMatch[0].toUpperCase()} campeona de la EURO!\n =============================================== `);
+            results.forEach(result => console.log(result));
+            console.log(`\n===============================================\n${newMatch[0].toUpperCase()} campeona de la EURO!\n=============================================== `);
             return;
         }
 
+        // We announce what phase we are in
         announcement(this.rounds);
-        //Mostramos los resultados
-        this.results.forEach(result => console.log(result));
 
-        // Le pasamos los ganadores a matches para preparar la nueva ronda
+        // Show the results of the matches
+        results.forEach(result => console.log(result));
+
+        // We pass the winners to matches to prepare for the new round
         this.matches = this.winers;
 
-        // Llamamos a la funcion de manera recursiva
+        // We call the function recursively
         this.play();
     }
 }
