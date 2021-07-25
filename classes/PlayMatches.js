@@ -9,9 +9,12 @@ export default class PlayMatches {
     play() {
         let newMatch = [];
         let matchIndex = 1;
+
         // Vaciamos los ganadores y resultados cada vez que se inicia una nueva ronda
         this.winers = [];
         this.results = [];
+
+        // Cada vez que entra suma una ronda para pasar de fase
         this.rounds++;
 
 
@@ -32,9 +35,9 @@ export default class PlayMatches {
             }
         }
 
-        // Funcion que crea valor aleatorio del 1 al 10
+        // Funcion que crea valor aleatorio del 1 al 6
         function goals() {
-            return Math.round(Math.random() * 10);
+            return Math.round(Math.random() * 6);
         }
 
         // En caso de empate
@@ -51,10 +54,14 @@ export default class PlayMatches {
             } else {
                 newMatch.push(team[1]);
             }
+
+            return `${team[0]} ${matchPenalti.team1} - ${team[1]} ${matchPenalti.team2} \t\t(Q${matchIndex})`;
+
         }
 
         // Recorre cada partido
         this.matches.forEach(team => {
+            let penaltisRound = false;
             let match = {
                 'team1': goals(),
                 'team2': goals()
@@ -63,7 +70,8 @@ export default class PlayMatches {
             if (match.team1 > match.team2) {
                 newMatch.push(team[0]);
             } else if (match.team1 === match.team2) {
-                penaltis(team);
+                penaltisRound = true;
+                this.results.push(penaltis(team));
             } else {
                 newMatch.push(team[1]);
             }
@@ -73,8 +81,7 @@ export default class PlayMatches {
                 newMatch = [];
             }
 
-            // TODO cuando empatan no tiene que mostrar este resultado sino el de los penaltis
-            this.results.push(`${team[0]} ${match.team1} - ${team[1]} ${match.team2} \t\t (Q${matchIndex})`);
+            if (!penaltisRound) this.results.push(`${team[0]} ${match.team1} - ${team[1]} ${match.team2} \t\t(Q${matchIndex})`);
 
             matchIndex++;
 
@@ -86,14 +93,17 @@ export default class PlayMatches {
         if (this.rounds == 4) {
             announcement(this.rounds);
             this.results.forEach(result => console.log(result));
-            console.log(`===============================================\n${newMatch[0].toUpperCase()} campeona de la EURO!\n===============================================`);
+            console.log(`===============================================\n${newMatch[0].toUpperCase()} campeona de la EURO!\n =============================================== `);
             return;
         }
 
         announcement(this.rounds);
+        //Mostramos los resultados
         this.results.forEach(result => console.log(result));
+
         // Le pasamos los ganadores a matches para preparar la nueva ronda
         this.matches = this.winers;
+
         // Llamamos a la funcion de manera recursiva
         this.play();
     }
