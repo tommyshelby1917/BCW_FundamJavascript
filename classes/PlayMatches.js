@@ -3,6 +3,7 @@ export default class PlayMatches {
         this.matches = matches;
         this.winers = [];
         this.rounds = 0;
+        this.thirdAndFourth = [];
     }
 
     play() {
@@ -16,7 +17,10 @@ export default class PlayMatches {
 
         // Each time we adds a round to pass to the next phase
         this.rounds++;
+        let rounds = this.rounds;
 
+        // Tercer y cuarto puesto
+        let thirdAndFourth = this.thirdAndFourth;
 
         function announcement(rounds) {
             switch (rounds) {
@@ -32,6 +36,8 @@ export default class PlayMatches {
                 case 4:
                     console.log("\n===== FINAL =====")
                     break;
+                case 5:
+                    console.log("\n===== TERCER Y CUARTO PUESTO =====");
             }
         }
 
@@ -42,8 +48,6 @@ export default class PlayMatches {
 
         // Main function where all the juice recipe of each game is
         function playGame(match) {
-            let penaltisRound = false;
-
             let matchInPlay = {
                 'team1': goals(),
                 'team2': goals()
@@ -56,12 +60,18 @@ export default class PlayMatches {
             }
 
             if (matchInPlay.team1 > matchInPlay.team2) {
-                results.push(`${match[0]} ${matchInPlay.team1} - ${match[1]} ${matchInPlay.team2} \t\t(Q${matchIndex})`);
+                // Third and fourth place
+                if (rounds === 3) {
+                    thirdAndFourth.push(match[1]);
+                }
+                results.push(`${match[0]} ${matchInPlay.team1} - ${match[1]} ${matchInPlay.team2} => ${match[0]} \t(Q${matchIndex})`);
                 return match[0];
             } else {
-                results.push(`${match[0]} ${matchInPlay.team1} - ${match[1]} ${matchInPlay.team2} \t\t(Q${matchIndex})`);
+                if (rounds === 3) {
+                    thirdAndFourth.push(match[0]);
+                }
+                results.push(`${match[0]} ${matchInPlay.team1} - ${match[1]} ${matchInPlay.team2} => ${match[1]} \t(Q${matchIndex})`);
                 return match[1];
-
             }
         }
 
@@ -78,13 +88,10 @@ export default class PlayMatches {
                 this.winers.push(newMatch);
                 newMatch = [];
             }
-
             matchIndex++;
-
         });
 
-
-        // The final round is playing so we show the winner of the cup
+        // The final round has played so we show the winner of the cup
         if (this.rounds == 4) {
             announcement(this.rounds);
             results.forEach(result => console.log(result));
@@ -97,6 +104,14 @@ export default class PlayMatches {
 
         // Show the results of the matches
         results.forEach(result => console.log(result));
+
+        // Third and fourth place is played
+        if (thirdAndFourth.length == 2) {
+            announcement(5);
+            results = [];
+            playGame(thirdAndFourth);
+            console.log(results[0]);
+        }
 
         // We pass the winners to matches to prepare for the new round
         this.matches = this.winers;

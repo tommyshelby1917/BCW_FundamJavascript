@@ -12,3 +12,5 @@ const teamsOfTheTournament = torneo.createMatches();
 // The tournament is going to play
 console.log("===============================================\n==== COMIENZO DE LA FASE DE ELIMINATORIAS =====\n===============================================\n");
 new PlayMatches(teamsOfTheTournament).play();
+
+//TODO 3era y 4rta posicion
