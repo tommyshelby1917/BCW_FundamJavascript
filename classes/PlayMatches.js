@@ -4,13 +4,12 @@ export default class PlayMatches {
         this.winers = [];
         this.rounds = 0;
         this.thirdAndFourth = [];
+        this.matchesWon = {};
     }
 
     play() {
         let results = [];
         let newMatch = [];
-        // The matchIndex will help us to know which round we are in
-        let matchIndex = 1;
 
         // We empty the winners and results every time a new round starts
         this.winers = [];
@@ -21,6 +20,7 @@ export default class PlayMatches {
 
         // Tercer y cuarto puesto
         let thirdAndFourth = this.thirdAndFourth;
+
 
         function announcement(rounds) {
             switch (rounds) {
@@ -53,6 +53,10 @@ export default class PlayMatches {
                 'team2': goals()
             }
 
+            // TODO aprovechar esta variable que he creado para simplicar el codigo
+            let team1 = match[0];
+            let team2 = match[1];
+
             // If it's a draw
             while (matchInPlay.team1 == matchInPlay.team2) {
                 matchInPlay.team1 = goals();
@@ -64,13 +68,15 @@ export default class PlayMatches {
                 if (rounds === 3) {
                     thirdAndFourth.push(match[1]);
                 }
-                results.push(`${match[0]} ${matchInPlay.team1} - ${match[1]} ${matchInPlay.team2} => ${match[0]} \t(Q${matchIndex})`);
+
+                results.push(`${match[0]} ${matchInPlay.team1} - ${match[1]} ${matchInPlay.team2} => ${match[0]}`);
                 return match[0];
             } else {
                 if (rounds === 3) {
                     thirdAndFourth.push(match[0]);
                 }
-                results.push(`${match[0]} ${matchInPlay.team1} - ${match[1]} ${matchInPlay.team2} => ${match[1]} \t(Q${matchIndex})`);
+
+                results.push(`${match[0]} ${matchInPlay.team1} - ${match[1]} ${matchInPlay.team2} => ${match[1]}`);
                 return match[1];
             }
         }
@@ -118,5 +124,6 @@ export default class PlayMatches {
 
         // We call the function recursively
         this.play();
+
     }
 }
