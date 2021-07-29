@@ -94,7 +94,6 @@ export default class PlayMatches {
                 this.winers.push(newMatch);
                 newMatch = [];
             }
-            matchIndex++;
         });
 
         // The final round has played so we show the winner of the cup
