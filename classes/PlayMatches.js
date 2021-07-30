@@ -4,11 +4,13 @@ export default class PlayMatches {
         this.winers = [];
         this.rounds = 0;
         this.thirdAndFourth = [];
-        this.matchesWon = {};
     }
 
     play() {
+        // Variable to save the results of each match
         let results = [];
+
+        // Variable to assign the new match that will be played
         let newMatch = [];
 
         // We empty the winners and results every time a new round starts
@@ -53,7 +55,6 @@ export default class PlayMatches {
                 'team2': goals()
             }
 
-            // TODO aprovechar esta variable que he creado para simplicar el codigo
             let team1 = match[0];
             let team2 = match[1];
 
@@ -66,18 +67,18 @@ export default class PlayMatches {
             if (matchInPlay.team1 > matchInPlay.team2) {
                 // Third and fourth place
                 if (rounds === 3) {
-                    thirdAndFourth.push(match[1]);
+                    thirdAndFourth.push(team2);
                 }
 
-                results.push(`${match[0]} ${matchInPlay.team1} - ${match[1]} ${matchInPlay.team2} => ${match[0]}`);
-                return match[0];
+                results.push(`${team1} ${matchInPlay.team1} - ${team2} ${matchInPlay.team2} => ${team1}`);
+                return team1;
             } else {
                 if (rounds === 3) {
-                    thirdAndFourth.push(match[0]);
+                    thirdAndFourth.push(team1);
                 }
 
-                results.push(`${match[0]} ${matchInPlay.team1} - ${match[1]} ${matchInPlay.team2} => ${match[1]}`);
-                return match[1];
+                results.push(`${team1} ${matchInPlay.team1} - ${team2} ${matchInPlay.team2} => ${team2}`);
+                return team2;
             }
         }
 
@@ -98,9 +99,10 @@ export default class PlayMatches {
 
         // The final round has played so we show the winner of the cup
         if (this.rounds == 4) {
+            let winnerOfTheEuroCup = newMatch[0];
             announcement(this.rounds);
             results.forEach(result => console.log(result));
-            console.log(`\n===============================================\n${newMatch[0].toUpperCase()} campeona de la EURO!\n=============================================== `);
+            console.log(`\n===============================================\n${winnerOfTheEuroCup.toUpperCase()} campeona de la EURO!\n=============================================== `);
             return;
         }
 
