@@ -1,3 +1,4 @@
+// Class that creates the tournament and mixes the teams for the first round
 export default class CreateTournament {
 
     constructor(allTeams) {
@@ -16,6 +17,7 @@ export default class CreateTournament {
         return this.createMatches();
     }
 
+    // function that draws teams to face between them
     createMatches() {
         let teams = this.mixTeams();
         let matches = [];
