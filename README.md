@@ -1,4 +1,4 @@
-# PRÁCTIVA FUNDAMENTOS CON JAVACRIPT
+# PRÁCTIVA FUNDAMENTOS CON JAVASCRIPT
 ## FullStack Web Developer
 ### Josep Miquel Arenas Beltran - Julio 2021
 ***
